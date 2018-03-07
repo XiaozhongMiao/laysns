@@ -1,0 +1,117 @@
+{extend name="index_base" /} {block name="seo"}
+<title>{$site_config['site_title']}|{$site_config['seo_title']}</title>
+
+<meta name="keywords" content="{$site_config['seo_keyword']}">
+<meta name="description" content="{$site_config['seo_description']}"> {/block} {block name="body"}
+<link rel="stylesheet" href="__HOME__/css/article.css">
+<div class="container weizhi_now visible-md visible-lg">
+    当前位置：
+    <a href="{:url('index/index/index')}">
+        <span class="layui-icon" style="margin-right:5px;">&#xe68e;</span>首页</a> -
+    <a href="{:url('index/articles/lists',array('cate_alias'=>$t['alias']))}">{$t.name}</a> - {$t.title}
+</div>
+<div class="container clearfix" style="padding:0px 8px;">
+    <div class="article-left col-xs-12 col-md-9">
+        <h3 class="article_title">{$t.title}</h3>
+        <div class="article_ini clearfix">
+            <a class="hidden-xs">时间：</a>
+            <span class="ar_time">{$t.time|date='Y-m-d',###}</span>
+            <a>作者：</a>
+            <a class="ar_author" href="{:url('user/index/home',array('id'=>$t.userid))}" target="_blank">{$t.username}</a>
+            <a>浏览：</a>
+            <span class="ar_person">{$t.view}
+				<!--422-->
+			</span>
+        </div>
+        <hr class="hx" />
+        <div class="article_wenz">
+            <!-- 开始文章内容-->
+            <!-- <p>
+                <img src="{$t.coverpic}" title="{$t.title}" />
+            </p> -->
+
+            <p>{$t.content|htmlspecialchars_decode}</p>
+            <!--文章内容结束-->
+        </div>
+        {if condition="$changyan neq 0"}
+        <div class="article-pinglun">
+
+
+            <!--PC和WAP自适应版-->
+            <div id="SOHUCS" sid="请将此处替换为配置SourceID的语句"></div>
+            <script type="text/javascript">
+                (function() {
+                    var appid = '{$changyan.appid}';
+                    var conf = '{$changyan.appkey}';
+                    var width = window.innerWidth || document.documentElement.clientWidth;
+                    if (width < 960) {
+                        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+                    } else {
+                        var loadJs = function(d, a) {
+                            var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                            var b = document.createElement("script");
+                            b.setAttribute("type", "text/javascript");
+                            b.setAttribute("charset", "UTF-8");
+                            b.setAttribute("src", d);
+                            if (typeof a === "function") {
+                                if (window.attachEvent) {
+                                    b.onreadystatechange = function() {
+                                        var e = b.readyState;
+                                        if (e === "loaded" || e === "complete") {
+                                            b.onreadystatechange = null;
+                                            a()
+                                        }
+                                    }
+                                } else {
+                                    b.onload = a
+                                }
+                            }
+                            c.appendChild(b)
+                        };
+                        loadJs("http://changyan.sohu.com/upload/changyan.js", function() {
+                            window.changyan.api.config({
+                                appid: appid,
+                                conf: conf
+                            })
+                        });
+                    }
+                })();
+            </script>
+        </div>
+        {/if}
+    </div>
+    <div class="article-right1 col-xs-12 col-md-3">
+        <div class="article-right">
+            <span class="ar_rtitle">
+				<i class="glyphicon glyphicon-user"></i>本文作者</span>
+            <div class="ar_athuor">
+                <a href="{:url('user/index/home',array('id'=>$t.userid))}" target="_blank">
+                    <img src="{$t.userhead|getheadurl}" />
+                </a>
+            </div>
+
+            <span class="ar_rtitle">
+				<i class="glyphicon glyphicon-signal"></i>阅读排行</span>
+            <ul class="arph_list clearfix">
+                {volist name="artphb" id="vo"}
+                <li>
+                    <a href="{:url( 'index/index/'.$t.template,array( 'id'=>$vo.id))}" target="_blank">{$vo.title}</a>
+                </li>
+                {/volist}
+            </ul>
+
+
+            <span class="ar_rtitle">
+				<i class="glyphicon glyphicon-th-list"></i>文章推荐</span>
+            <ul class="arph_list tuijian clearfix">
+                {volist name="artchoice" id="vo"}
+                <li>
+                    <a href="{:url( 'index/index/'.$t.template,array( 'id'=>$vo.id))}" target="_blank">{$vo.title}</a>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{/block}

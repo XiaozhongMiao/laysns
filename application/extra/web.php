@@ -1,0 +1,1 @@
+<?php return ['cb_open'=>'3','WEB_TPL'=>'default','WEB_BTPL'=>'default',]; 

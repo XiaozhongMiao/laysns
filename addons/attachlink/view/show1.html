@@ -1,0 +1,63 @@
+ {if condition="$wpcontent neq ''"}
+<div class="jc_jieshao_title clearfix" style="margin-top:11px;border:0;"> <span><i class="glyphicon glyphicon-download-alt" style="top: 3px;font-size:19px;"></i>下载地址</span> </div>
+<ul class="clearfix" id="downloadurl">
+    {volist name="downlinksarr" id="vo"}
+    <li class="col-md-3 col-xs-12" data-id="{$wpcontent.id}">
+        <a href="javascript:;" class="wangpan" data-linkid="{$vo.linkid}" data-analyze="{$vo.analyze}"><b><img src="{$static_path}/image/{$vo.img}" style="height:20px" /> {$vo.name} {if $vo.passwd} (密码：{$vo.passwd}){/if}</b></a>
+    </li>
+    {/volist}
+</ul>
+
+<script>
+    layui.use(['form', 'element'], function() {
+        var form = layui.form,
+            jq = layui.jquery;
+
+        jq('.wangpan').on('click', function() {
+            var analyze = jq(this).data('analyze');
+            var linkid = jq(this).data('linkid');
+            var id = jq(this).parent().data('id');
+
+            // if (analyze) {
+            loading = layer.load(2, {
+                shade: [0.2, '#000']
+            });
+            var url = "{:addons_url('attachlink://Attachlink/openlink',array(),true)}";
+            jq.post(url, {
+                id: id,
+                linkid: linkid,
+                analyze: analyze
+            }, function(data) {
+                layer.close(loading);
+
+                if (data.code == 200) {
+                    //  if (data.local == 1) {
+                    //      var downurl = "{:url('index/download')}?url=" + data.path + "&name=" + data.name + "&local=" + data.local;
+                    // } else {
+                    var downurl = data.path;
+                    //   }
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    }, function() {
+
+                        location.href = downurl;
+                    });
+
+
+
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        anim: 6,
+                        time: 1000
+                    });
+                }
+            });
+            // } else {
+            //     window.open(realurl);
+            // }
+        });
+    });
+</script>
+{/if}

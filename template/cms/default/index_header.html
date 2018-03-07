@@ -1,0 +1,66 @@
+<div class="header visible-md visible-lg">
+    <div class="container clearfix">
+        <span>本站CMS中的内容全部转自QQ腾龙网，仅供演示CMS展示效果使用</span>
+        <ul class="clearfix">
+            {if condition="$Think.session.userid neq ''"}
+            <li>欢迎你，<a class="loginall" title="点击进入个人中心" href="{:url('user/index/index')}">{$Think.session.username}</a></li>
+            {else /}
+            <li><a class="loginall" href="{:url('user/login/index')}">登录</a></li>
+            <li><a class="regall" href="{:url('user/login/reg')}">注册</a></li>
+            {/if}
+            <li><a href="{:url('index/articles/add')}">我要投稿</a></li>
+            {if CBOPEN==3}
+            <li><a href="{:url('bbs/index/index')}">进入社区</a></li>{/if}
+        </ul>
+    </div>
+</div>
+
+<div class="logo clearfix container visible-md visible-lg">
+    <a href="{:url('index/index/index')}" class="logoimg col-xs-3"><img src="{if $site_config['cmslogo']} __ROOT__{$site_config['cmslogo']} {else /}__PUBLIC__images/logocms.png{/if}" width="100%" height="104px" alt="LOGO" /></a>
+    <!-- <img src="/img/yxcz.png" class="col-xs-3 yxcz" alt="宣传语" /> -->
+    <div class="serch col-xs-6">
+        <form action="{:url('index/index/search')}">
+            <input type="text" required="required" name="ks" value="<?php echo input('ks');?>" class="serch_text col-xs-9" placeholder="请输入搜索的关键字" />
+            <input type="submit" class="serch_btn layui-icon col-xs-3" value="&#xe615;" />
+        </form>
+
+    </div>
+</div>
+
+<nav class="navlan">
+    <div class="container">
+        <div class="visible-xs visible-sm nav_phone">
+            <a class="phone_logo_text">LaySNS</a>
+            <div class="phone_list_btn">
+                <span class="icon-bar" style="margin:0"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </div>
+        </div>
+        <ul class="nav_list clearfix">
+            <div class="clearfix">
+                {if condition="$Think.session.userid neq ''"}
+                <li class="phone_touxiang visible-xs visible-sm">
+                    <img src="{$Think.session.userhead|getheadurl}" width="100px" height="100px" alt="用户头像" />
+                </li>
+                <li class="phone_user_login col-md-2 col-sm-12 visible-xs visible-sm"><a href="{:url('user/index/index')}">欢迎你，{$Think.session.username}</a></li>
+                {else /}
+                <li class="phone_touxiang visible-xs visible-sm">
+                    <img src="public/images/default.png" width="100px" height="100px" alt="用户头像" />
+                </li>
+                <li class="phone_user_login col-md-2 col-sm-12 visible-xs visible-sm"><a href="{:url('user/login/index')}">您好，请先登录账号</a></li>
+                {/if}
+                <!-- 头像功能 -->
+                <li class="col-md-2 col-sm-12"><a href="{:url('index/index/index')}"><i class="glyphicon glyphicon-home"></i>网站首页</a></li>
+                {if CBOPEN==3}
+                <li class="col-md-2 col-sm-12"><a href="{:url('bbs/index/index')}"><i class="glyphicon glyphicon-home"></i>社区</a></li>{/if} {volist name="cmsnav" id="vo" } {eq name="vo.pid" value="1"}
+
+                <li class="col-md-2 col-sm-12"><a href="{$vo.link|getnavlink=$vo.sid}" target="{$vo.target}" title="{$vo.alias}"><i class="glyphicon glyphicon-home"></i>{$vo.name}</a></li>
+
+                {/eq} {/volist}
+
+                <li class="col-md-2 col-sm-12 visible-xs visible-sm"><a href="{:url('user/index/index')}"><i class="glyphicon glyphicon-user"></i>个人中心</a></li>
+            </div>
+        </ul>
+    </div>
+</nav>

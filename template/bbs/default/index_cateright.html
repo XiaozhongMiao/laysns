@@ -1,0 +1,23 @@
+<div class="layui-col-md4">
+
+    <dl class="fly-panel fly-list-one">
+        <dt class="fly-panel-title">热议帖子</dt> {volist name="tptch" id="vo"}
+        <dd>
+            <a href="{:url('bbs/index/thread',array('id'=>$vo.id))}">{$vo.title}</a>
+            <span>
+                <i class="iconfont icon-pinglun1"></i> {$vo.reply}</span>
+        </dd>
+        {/volist}
+    </dl>
+    <!-- <div class="fly-panel">
+    <div class="fly-panel-title">官方产品</div>
+    <div class="fly-panel-main">
+      <a href="http://layim.layui.com/?from=fly" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01" style="background-color: #5FB878;">LayIM 3.0 - layui 旗舰之作</a></div>
+  </div> -->
+    <div class="fly-panel" style="padding: 20px 0; text-align: center;">
+        <img src="__PUBLIC__images/qqgroup.png" style="max-width: 200px;" alt="layui">
+        <p style="position: relative; color: #666;">QQ扫码（或搜索 227552979）加入群聊</p>
+        <img src="__PUBLIC__images/qrcode.jpg" style="max-width: 200px;" alt="layui">
+        <p style="position: relative; color: #666;">微信扫码（或搜索 laysns社区）关注公众号</p>
+    </div>
+</div>

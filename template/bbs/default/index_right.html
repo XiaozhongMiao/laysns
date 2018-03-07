@@ -1,0 +1,47 @@
+<div class="layui-col-md4">
+    <div class="fly-panel">
+        <h3 class="fly-panel-title">备忘帖</h3>
+        <ul class="fly-panel-main fly-list-static">
+            {volist name="tptcm" id="vo"}
+            <li>
+                <a href="{:url('bbs/index/thread',array('id'=>$vo.id))}">{$vo.title}</a>
+            </li>
+            {/volist}
+
+        </ul>
+    </div>
+
+    {include file="index/sign"}
+
+    <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
+        <h3 class="fly-panel-title">回贴周榜</h3>
+        <dl>
+            {volist name="tptm" id="vo"}
+            <dd style="margin-right:20px">
+                <a href="{:url('user/index/home',array('id'=>$vo['id']))}">
+                    <img src="{$vo.userhead|getheadurl}">
+                    <cite>{$vo.username}</cite>
+                    <i>{$vo.forumnum}帖子</i>
+            </dd>
+            {/volist}
+        </dl>
+    </div>
+
+    <dl class="fly-panel fly-list-one">
+        <dt class="fly-panel-title">热评帖子</dt> {volist name="tptch" id="vo"}
+        <dd>
+            <a href="{:url('bbs/index/thread',array('id'=>$vo.id))}">{$vo.title}</a>
+            <span><i class="iconfont icon-pinglun1"></i> {$vo.reply}</span>
+        </dd>
+        {/volist}
+    </dl>
+
+    <div class="fly-panel" style="padding: 20px 0; text-align: center;">
+        <img src="__PUBLIC__images/qqgroup.png" style="max-width: 165px;" alt="layui">
+        <p style="position: relative; color: #666;">QQ扫码（或搜索 227552979）加入官方群聊</p>
+        <!-- <img src="__PUBLIC__images/qrcode.jpg" style="max-width: 200px;" alt="layui">
+        <p style="position: relative; color: #666;">微信扫码（或搜索 laysns社区）关注公众号</p> -->
+        <p>源码已入驻：<a href="http://down.admin5.com/php/139729.html" target="_blank">A5下载</a><a href="http://down.chinaz.com/soft/38961.htm" target="_blank">站长下载</a></p>
+    </div>
+    {:hook('friendlinkshow',array('onwhere'=>'default'))}
+</div>

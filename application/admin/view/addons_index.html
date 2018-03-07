@@ -1,0 +1,205 @@
+{extend name="base" /} {block name="body"}
+<div class="admin-main">
+    <div class="layui-field-box layui-form">
+        {if condition="$list eq 0"}
+        <blockquote style="padding: 10px;border-left: 5px solid #009688;" class="layui-elem-quote">还未有任何插件</blockquote>
+        {else /}
+
+        <table class="layui-table admin-table">
+            <thead>
+                <tr>
+                    <th width="100">名称</th>
+                    <th>标识</th>
+                    <th width="400">描述</th>
+                    <th width="50">状态</th>
+                    <th>作者</th>
+                    <th width="50">版本</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach name="list" item="vo"}
+                <tr>
+                    <td>{$vo.title}</td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.description}</td>
+                    <td>{$vo.status_text|default="未安装"}</td>
+                    <td><a target="_blank" href="{$vo.url|default='http://www.laysns.com'}">{$vo.author}</a></td>
+                    <td>{$vo.version}</td>
+                    <td>
+                        {eq name="vo.uninstall" value="0"} {if condition="$vo['config'] neq 'null'"}
+                        <a class="layui-btn layui-btn-normal layui-btn-sm shezhi" href="{:url('addons/config',array('id'=>$vo['id']))}"> <span class="button-content"> 设置</span></a>
+                        {/if}
+
+
+                        <a class="layui-btn layui-btn-danger layui-btn-sm xiezai" href="javascript:;" data-adminlist="{$vo['has_adminlist']}" data-uurl="{:url('addons/adminlist',array('name'=>$vo['name']))}" data-url="{:url('addons/uninstall',array('id'=>$vo['id']))}" zs-name="{$vo['name']}">
+                            <span class="button-content"> 卸载</span></a>
+
+                        {else /}
+                        <a class="layui-btn layui-btn-success layui-btn-sm  anzhuang" href="javascript:;" data-adminlist="{$vo['has_adminlist']}" data-uurl="{:url('addons/adminlist',array('name'=>$vo['name']))}" data-url="{:url('addons/install',array('addon_name'=>$vo['name']))}">
+                            <span class="button-content"> 安装</span></a>
+                        {/eq}
+                    </td>
+
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+
+        {/if}
+
+    </div>
+
+
+</div>
+{/block} {block name="script"}
+<script>
+    layui.use(['layer', 'jquery', 'form'], function() {
+        var layer = layui.layer,
+            form = layui.form,
+            jq = layui.jquery;
+
+        jq('.anzhuang').click(function() {
+
+
+            var url = jq(this).data('url');
+            //var uurl=jq(this).data('uurl');
+            //	var adminlist=jq(this).data('adminlist');
+
+            jq.getJSON(url, function(data) {
+
+
+                if (data.code == 200) {
+
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    }, function() {
+
+                        location.reload();
+                        /*    if(adminlist==1){
+                               jq(window.parent.document).contents().find('.fa-sliders').each(function(){
+                             	  
+                              	 
+                              	 
+                             	  
+                              	 if(jq(this).parent().find('cite').html()=='已装插件'){
+                              		 
+                              		
+                                   	
+                              		
+                              	
+                              		
+                              	
+                              		
+                              		if(jq(this).parentsUntil('li').parent().find('.layui-nav-child').length==0){
+                              			
+                              			var html="<dl class='layui-nav-child'>";
+                              			 html+= "<dd title='"+data.title+"'>";
+                                  		 html+="<a href='javascript:;' data-url='"+uurl+"'>";
+                                  		 html+="<cite>"+data.title+"</cite>";
+                                  		 html+="</a>";
+                                  		 html+="</dd>";
+                                  		 html+="</dl>";
+                                  		 
+                                  		 
+                                  		 jq(this).parentsUntil('li').append("<span class='layui-nav-more'></span>");
+                                  		 jq(this).parentsUntil('li').parent().append(html);
+                              			
+                              		}else{
+                              			
+                              			 var html= "<dd title='"+data.title+"'>";
+                                  		 html+="<a href='javascript:;' data-url='"+uurl+"'>";
+                                  		 html+="<cite>"+data.title+"</cite>";
+                                  		 html+="</a>";
+                                  		 html+="</dd>";
+                                  		
+                                  		 jq(this).parentsUntil('li').parent().find('.layui-nav-child').append(html);
+                              		}
+                              	
+                              	 }
+                              
+                            	jq(window.parent.document).contents().find('.fa-dashboard').click();
+                                });
+                           } */
+
+
+                    });
+                } else {
+
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        anim: 6,
+                        time: 1000
+                    });
+                }
+            });
+
+
+        });
+        jq('.xiezai').click(function() {
+
+            //	var uurl=jq(this).data('uurl');
+            var url = jq(this).data('url');
+            //var adminlist=jq(this).data('adminlist');
+            jq.getJSON(url, function(data) {
+
+
+                if (data.code == 200) {
+
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    }, function() {
+                        location.reload();
+
+                        /* if(adminlist==1){
+                            jq(window.parent.document).contents().find('.fa-sliders').each(function(){
+                            	  
+                              	 
+                              	 
+                            	  
+                              	 if(jq(this).parent().find('cite').html()=='已装插件'){
+                              		 
+                              		
+                                   	
+                              		
+                              		 
+                              		if(jq(this).parentsUntil('li').parent().find('dd').length==1){
+                              			
+                              			
+                              		 jq(this).parents().find('.layui-nav-more').remove();
+                              		
+                                  		 jq(this).parentsUntil('li').parent().find('.layui-nav-child').remove();
+                              			
+                              		}else{
+                              			
+                              		
+                                  		 jq(this).parentsUntil('li').parent().find('dd[title='+data.title+']').remove();
+                              		}
+                              	//	jq(window.parent.document).contents().find('a.logo').click();
+                              	 }
+                              
+                              	
+                                });
+                        } */
+
+                    });
+                } else {
+
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        anim: 6,
+                        time: 1000
+                    });
+                }
+            });
+
+
+        });
+
+
+
+    });
+</script>
+{/block}

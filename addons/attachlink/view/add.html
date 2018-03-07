@@ -1,0 +1,143 @@
+<style type="text/css">
+    .wp_urls a {
+        padding-right: 15px;
+        position: relative
+    }
+    
+    .wp_urls a {
+        padding: 0 20px 0 8px;
+        color: #3B6268;
+        background: #FFFFBA;
+        border: 1px #F8E06E solid;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        height: 26px;
+        line-height: 26px;
+        display: block;
+        float: left
+    }
+    
+    .wp_urls a em {
+        width: 12px;
+        height: 12px;
+        font-style: normal;
+        display: block;
+        position: absolute;
+        top: 7px;
+        right: 4px;
+        z-index: 2;
+        background: url("public/images/sx.png") no-repeat 0 0;
+    }
+</style>
+
+<input type="hidden" name="linkinfo" value="{$attachlink.linkinfo}">
+<div id="wp_url" class="wp_urls" style="margin-top: 20px;">
+    <span style="margin-bottom: 5px;float: left;">
+			{if condition="$attachlink['linkinfo'] neq ''"}<?php $arr=explode(',', $attachlink['linkinfo']);foreach ($arr as $k=>$v){echo "<a href='javascript:;'>$v<em></em></a>";}?>{/if}
+		
+			</span>
+    <div class="layui-form-item" style="margin-bottom: 10px;">
+        <label class="layui-form-label">附件</label>
+        <div class="layui-inline">
+            <button class="layui-btn layui-bg-blue" id="attachlink_add" type="button" title="点击可继续添加">添加链接</button>
+
+            <button type="button" class="layui-btn layui-bg-blue" id="attach_upbtn"><i class="layui-icon">&#xe67c;</i>上传附件</button>
+            <input type="hidden" name="attachscore" value="0">
+            <input type="hidden" name="otherinfo" value="">
+        </div>
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    layui.use(['form', 'upload', 'element'], function() {
+        var form = layui.form,
+            upload = layui.upload,
+            $ = layui.jquery;
+        var device = layui.device();
+
+        $("#wp_url").on('click', 'a>em', function() {
+            var tag = $(this).parent().text();
+            $(this).parent().remove();
+            var tags = new Array();
+            $("#wp_url").find('a').each(function() {
+                tags.push($(this).text());
+            });
+            $("input[name=linkinfo]").val(tags.join(","));
+        });
+
+        function addlink(title, link, pass = '') {
+            if (title == '') title = '附件';
+            var tags = $.trim($("input[name=linkinfo]").val());
+            if (tags !== "") {
+                tags = tags.split(",");
+            } else {
+                tags = new Array();
+            }
+            var tag = $.trim(title) + "|" + $.trim(link);
+            var passwd = $.trim(pass);
+            if (passwd !== "") tag = tag + "|" + passwd;
+
+            if (tag !== '' && $.inArray(tag, tags) === -1) {
+                tags.push(tag);
+                $("#wp_url").children('span').empty();
+                $.each(tags, function(k, v) {
+                    $("#wp_url").children('span').append('<a href="javascript:;">' + v + '<em></em></a>');
+                });
+                $("input[name=linkinfo]").val(tags.join(";"));
+
+            } else {
+                layer.msg('已上传过');
+            }
+
+
+        }
+        upload.render({
+            elem: '#attach_upbtn',
+            url: "{:url('upload/upfile')}",
+            accept: 'file',
+            done: function(res) {
+                if (res.code == 200) {
+                    addlink(res.filename, res.path);
+                } else {
+                    layer.msg(res.msg, {
+                        icon: 2,
+                        time: 2000
+                    });
+                }
+            }
+        });
+        $("#attachlink_add").click(function() {
+
+            layer.open({
+                type: 1,
+                id: 'LAY_pushcase',
+                title: '添加链接',
+                shadeClose: true,
+                area: (device.ios || device.android) ? ($(window).width() + 'px') : '450px',
+                content: ['<div  style="padding: 10px;text-align:center"><div class="layui-inline"><input id="attch_name" type="text" placeholder="资源名" autocomplete="off" class="layui-input" style="width: 100px;float: left;"><input id="wp_input" type="text" placeholder="资源地址(需以http开头)" autocomplete="off" class="layui-input" style="width: 230px;float: left;">',
+                    '<input id="wp_passwd" type="text" placeholder="密码(选填)" autocomplete="off" class="layui-input" style="width: 80px;float: left;margin-right: 20px;"></div>', '<div style="margin:10px auto"><button type="button" lay-submit lay-filter="pushCase" class="layui-btn" title="提交一个后接着下一个">提交</button><button type="button" lay-submit lay-filter="close" class="layui-btn layui-btn-danger">关闭</button></div></div>'
+                ].join(''),
+                success: function(layero, index) {
+
+                    form.on('submit(pushCase)', function(data) {
+                        var param = data.field;
+
+                        addlink($("#attch_name").val(), $("#wp_input").val(), $("#wp_passwd").val());
+                        $("#attch_name").val('');
+                        $("#wp_input").val('');
+                        $("#wp_passwd").val('');
+                    });
+                    form.on('submit(close)', function(data) {
+                        layer.close(index);
+                    });
+                }
+            });
+
+
+        });
+    });
+</script>

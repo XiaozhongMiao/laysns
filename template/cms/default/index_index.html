@@ -1,0 +1,192 @@
+{extend name="index_base" /} {block name="seo"}
+<title>{$site_config['site_title']}|{$site_config['seo_title']}</title>
+
+<meta name="keywords" content="{$site_config['seo_keyword']}">
+<meta name="description" content="{$site_config['seo_description']}"> {/block} {block name="body"}
+<link rel="stylesheet" href="__HOME__/css/index.css">
+<script src="__HOME__/js/index.js"></script>
+<div class="container index">
+
+    <div class="today col-xs-12 col-md-8 ">
+        <div class="today_title ">
+            <a class="today_t ">
+                <span class="layui-icon ">&#xe637;</span>
+                <font>最近更新</font>
+            </a>
+            <a class="today_a " href="{:url('index/articles/lists')}">更多</a>
+        </div>
+        <div class="today_container ">
+            <ul class="jc_list clearfix ">
+                {volist name="article_new " id="vo "}
+                <li class="col-sm-6 col-xs-12 clearfix ">
+                    <a href="{:url('user/index/home',array('id'=>$vo.uid))}" target="_blank " title="点击查看作者">
+                        <img src="{$vo.userhead|getheadurl}
+						 " class="jc_list_logo " />
+                    </a>
+                    <a href="{:url( 'index/index/'.$vo.template,array( 'id'=>$vo.id))}" title="{$vo.title}" class="col-xs-8">{$vo.title|mb_substr=0,20,'utf-8'}</a>
+                    <em class="old_time col-xs-2" {if date( 'Ymd') eq date( 'Ymd',$vo.time) }style="color:red" {/if}>{$vo.time|date='m-d',###}</em>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <!-- 今日更新 -->
+    <div class="user_login col-xs-12 col-md-4 visible-md visible-lg">
+        <div class="login col-xs-12 clearfix">
+            {if condition="$Think.session.userid neq ''"}
+            <div class="user_success">
+                <a href="{:url('user/index/index')}">
+                    <img src="{$Think.session.userhead|getheadurl}" class="success_logo" data-ljz="false" />
+                </a>
+                <span class="success_nick">
+					<a href="{:url('user/index/index')}" target="_blank" style="margin-right:20px;max-width:70%;">{$Think.session.username}</a>
+					<a  data-url="{:url('user/login/logout')}" location-url="{:url('index/index/index')}" class="logi_logout" href="javascript:void(0)">退出</a>
+				</span>
+                <div class="success_vip clearfix">
+                    <span class="success_vipgrade">账号类型：
+						<i >{$Think.session.grades||getgradenamebyid}</i>
+					</span>
+                    <span class="success_viptime">余额：
+						<i id="pointnum">{$Think.session.point}</i> {:JF_NAME}
+					</span>
+                </div>
+
+                {include file="index/sign"}
+
+                <a href="{:url('index/articles/add')}" target="_blank" class="strat_vip">
+                    <span class="glyphicon glyphicon-edit" style="margin-right:8px;top:2px;"></span>我要投稿</a>
+                <fieldset class="col-xs-10">
+                    <legend>尊贵账号特权</legend>
+                </fieldset>
+                <ul class="tequan1 clearfix col-xs-10">
+                    <li class="clearfix">
+                        <div>
+                            <i style="width: 57px; height: 38px; background-position: -53px 0;"></i>
+                            <span>过滤部分广告</span>
+                        </div>
+                        <div class="liright">
+                            <i style="width: 51px; height: 40px; background-position: -111px 0;"></i>
+                            <span>免费领赞</span>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div>
+                            <i style="width: 66px; height: 55px; background-position: -274px 0;"></i>
+                            <span>投稿优先审核</span>
+                        </div>
+                        <div class="liright">
+                            <i style="width: 54px; height: 55px; background-position: -341px 0;"></i>
+                            <span>下载提速</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {else /}
+            <div class="user_bad">
+                <a class="btn_login col-xs-10" href="{:url('user/login/index')}">立即登录</a>
+                <a href="{:url('index/articles/add')}" class="vip_btn col-xs-10">投稿作品</a>
+                <fieldset class="col-xs-10">
+                    <legend>拥有账号特权</legend>
+                </fieldset>
+                <ul class="tequan clearfix col-xs-10">
+                    <li class="clearfix">
+                        <div>
+                            <i style="background-position: center -389px;"></i>
+                            <span>上传教程</span>
+                        </div>
+                        <div class="liright">
+                            <i style="background-position: center -360px;"></i>
+                            <span>投递文章</span>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div>
+                            <i style="background-position: center -180px；"></i>
+                            <span>积分兑换</span>
+                        </div>
+                        <div class="liright">
+                            <i style="background-position: center -263px;"></i>
+                            <span>每日签到</span>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="tequan1 clearfix col-xs-10">
+                    <li class="clearfix">
+                        <div>
+                            <i style="width: 57px; height: 38px; background-position: -53px 0;"></i>
+                            <span>过滤部分广告</span>
+                        </div>
+                        <div class="liright">
+                            <i style="width: 51px; height: 40px; background-position: -111px 0;"></i>
+                            <span>免费领赞</span>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div>
+                            <i style="width: 66px; height: 55px; background-position: -274px 0;"></i>
+                            <span>投稿优先审核</span>
+                        </div>
+                        <div class="liright">
+                            <i style="width: 54px; height: 55px; background-position: -341px 0;"></i>
+                            <span>下载提速</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {/if}
+        </div>
+    </div>
+    <!-- 用户登录框 -->
+
+    <div class="updata_list col-xs-12">
+        {volist name="artbycatelist" id="vo"}
+        <div class="g-class-cont col-xs-12 col-md-4">
+            <dl>
+                <dt>
+					<i></i>
+					<a style="background:{$vo.background}" href="{:url('index/articles/lists',array('cate_alias'=>$vo.alias))}">{$vo.name}</a>
+					<i></i>
+				</dt>
+                <dd>
+                    {volist name="$vo.artlists" id="v"}
+                    <a href="{:url( 'index/index/'.$vo.template,array( 'id'=>$v.id))}" target="_blank">
+                        <strong>{$v.title}</strong>
+                        <b></b>
+                    </a>
+                    {/volist}
+                </dd>
+            </dl>
+        </div>
+        {/volist}
+    </div>
+
+    {volist name="article_pic" id="vo"}
+    <div class="qqtouxiang col-xs-12">
+        <div class="tx_head">
+            <div class="tx_left col-xs-12 col-md-3 col-lg-2" style="background:{$vo.background}">
+                <i class="layui-icon">{$vo.icon}</i>
+                <a href="{:url('index/articles/lists',array('cate_alias'=>$vo.alias))}">{$vo.name}</a>
+            </div>
+            <a class="tx_right col-xs-1 visible-lg visible-md" href="{:url('index/articles/lists',array('cate_alias'=>$vo.alias))}">更多
+			</a>
+        </div>
+        <div class="tx_container clearfix">
+            <ul class="tx_img">
+                {volist name="$vo.artlists" id="v"}
+                <li>
+                    <a href="{:url( 'index/index/'.$vo.template,array( 'id'=>$v.id))}" target="_blank">
+                        <img src="{:$v['coverpic']?$v['coverpic']:DEF_COVER}" alt="{$v.title}" />
+                        <span>{$v.title}</span>
+                    </a>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    {/volist}
+    <!-- 排行榜结束，占据一定的位置，避免显得内容较少 -->
+    {:hook('friendlinkshow',array('onwhere'=>'cms'))}
+</div>
+<div class="eventCode"></div>
+<ul class="danmulist clearfix hidden-xs hidden-sm"> </ul>
+{/block}
